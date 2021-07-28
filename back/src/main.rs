@@ -17,7 +17,7 @@ struct Todo {
 
 #[get("/")]
 fn index() -> String {
-    "Hello, world!".to_string()
+    "Welcome ToDo app  \n Use /init to get data \n /new/name/date to add todo /n /rm/index to remove a todo".to_string()
 }
 
 #[get("/new/<name>/<date>")]

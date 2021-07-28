@@ -13,11 +13,11 @@ export default class App extends Component {
   }
   state = {
     count: 0,
-    url: "http://localhost:8000/init",
+    url: "http://localhost:8000/",
     data: [] as Todo[],
   };
   getData = () => {
-    fetch(this.state.url)
+    fetch(`${this.state.url}/init`)
       .then((rs) => {
         return rs.json();
       })
@@ -34,20 +34,17 @@ export default class App extends Component {
   newTodo = () => {
     let name = prompt("Enter Name of new Todo");
     let date = prompt("Enter Date of new Todo");
-    fetch(`http://localhost:8000/new/${name}/${date}`).then((res) => {
+    fetch(`${this.state.url}/new/${name}/${date}`).then((res) => {
       this.getData();
     });
   };
   rmTodo = () => {
-    let {data}=this.state;
-    let index = prompt(
-      `Enter index of todo to be removed 0..${data.length}`
-    );
+    let { data } = this.state;
+    let index = prompt(`Enter index of todo to be removed 0..${data.length}`);
     if (index != null) {
       let indexi = parseInt(index);
       if (indexi >= 0 && indexi < data.length) {
-        fetch(`http://localhost:8000/rm/${indexi}`).then((res) => {
-        });
+        fetch(`${this.state.url}/rm/${indexi}`).then((res) => {});
       }
     }
     this.getData();

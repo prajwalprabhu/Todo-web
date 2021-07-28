@@ -15,6 +15,9 @@ def read_json():
 			with open("data.json","w") as f:
 				dump([{"name":"","date":""}],f)
 			return read_json()
+@app.route("/")
+def root():
+	return "<h1>Welcome ToDo app  </h1><br>Use /init to get data <br> /new/name/date to add todo<br> /rm/index to remove a todo"
 
 @app.route("/new/<name>/<date>")
 def new_todo(name,date):

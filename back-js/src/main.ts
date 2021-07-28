@@ -1,31 +1,42 @@
 import express from "express";
-import { join } from "path";
 import * as fs from "fs";
 let app = express();
 interface Todo {
-  Name: string;
-  Date: string;
+  name: string;
+  date: string;
 }
 app.get("/", (req, res) => {
-  res.send("<H1> Hello World insode nodemon!!!!! </h1>");
+  res.send(
+    "<h1>Welcome ToDo app  </h1><br>Use /init to get data <br> /new/name/date to add todo<br> /rm/index to remove a todo"
+  );
 });
-app.get("/new/:name/:date", (req, res) => {
+app.get("/init", (req, res) => {
+  let data = read();
+  res.send(data);
+});
+app.get("/new/:_name/:_date", (req, res) => {
   const data = read();
-  // console.log(data);
-  res.sendFile(join(__dirname, "/data.json"), (err) => {
-    console.log(err);
-  });
+  console.log(req.params);
+  let { _name, _date } = req.params;
+  data.push({ name: _name, date: _date });
+  write(data);
+  res.send();
 });
-
-const read = (): string => {
-  let dataa: string = "";
-  fs.readFile("./data.json", (err, data) => {
-    if (err === null) {
-      console.log(data.toString());
-      dataa = data.toString();
-    }
-  });
-  return dataa;
+app.get("/rm/:index", (req, res) => {
+  let { index } = req.params;
+  let i = parseInt(index);
+  let data = read();
+  if (i > -1) {
+    data.splice(i, 1);
+  }
+  write(data);
+  res.send();
+});
+const read = (): Todo[] => {
+  return JSON.parse(fs.readFileSync("./src/data.json", "utf8"));
 };
-
+const write = (data: Todo[]) => {
+  let datas = JSON.stringify(data);
+  fs.writeFileSync("./src/data.json", datas);
+};
 app.listen("8000", () => console.log(`Started server`));
