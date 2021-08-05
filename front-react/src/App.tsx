@@ -1,10 +1,9 @@
 import React, { Component } from "react";
+import axios from "./axios";
+interface TodoProps {}
 interface Todo {
   name: string;
   date: string;
-}
-interface TodoProps {
-  // name:string
 }
 export default class App extends Component {
   constructor(props: TodoProps) {
@@ -12,39 +11,28 @@ export default class App extends Component {
     this.getData();
   }
   state = {
-    count: 0,
-    url: "http://localhost:8000/",
     data: [] as Todo[],
   };
-  getData = () => {
-    fetch(`${this.state.url}/init`)
-      .then((rs) => {
-        return rs.json();
-      })
-      .then((rj) => {
-        this.setState({ data: rj as Todo[] });
-      })
-      .catch((err) => {
-        alert(`Error :${err}`);
-      });
-  };
-  inc = () => {
-    this.setState({ count: this.state.count + 1 });
+  getData = async () => {
+    let res = await axios.get("/init");
+    this.setState({ data: res.data });
   };
   newTodo = () => {
     let name = prompt("Enter Name of new Todo");
     let date = prompt("Enter Date of new Todo");
-    fetch(`${this.state.url}/new/${name}/${date}`).then((res) => {
+    axios.get(`/new/${name}/${date}`).then((res) => {
       this.getData();
     });
   };
   rmTodo = () => {
     let { data } = this.state;
-    let index = prompt(`Enter index of todo to be removed 0..${data.length}`);
+    let index = prompt(
+      `Enter index of todo to be removed 0..${data.length - 1}`
+    );
     if (index != null) {
       let indexi = parseInt(index);
       if (indexi >= 0 && indexi < data.length) {
-        fetch(`${this.state.url}/rm/${indexi}`).then((res) => {});
+        axios.get(`/rm/${indexi}`).then((res) => {});
       }
     }
     this.getData();
@@ -54,10 +42,10 @@ export default class App extends Component {
 
     return (
       <div>
-        <div className="head">ToDo Handler</div>
+        <div className='head'>ToDo Handler</div>
         <button onClick={this.newTodo}>New </button>
         <button onClick={this.rmTodo}>Remove</button>
-        <div className="todo">
+        <div className='todo'>
           {this.state.data.map((todo, index) => {
             return (
               // <h1></h1>
