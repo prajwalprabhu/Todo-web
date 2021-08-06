@@ -1,6 +1,8 @@
 import express from "express";
+import cors from "cors";
 import * as fs from "fs";
 let app = express();
+app.use(cors());
 interface Todo {
   name: string;
   date: string;

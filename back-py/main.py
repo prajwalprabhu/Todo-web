@@ -1,8 +1,9 @@
+from flask_cors import CORS
 from flask import Flask
 from json import load,dump,dumps
 
 app = Flask(__name__)
-
+CORS(app)
 def write_json(data):
 	with open("data.json","w") as f:
 		dump(data,f)
