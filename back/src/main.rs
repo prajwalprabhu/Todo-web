@@ -20,11 +20,10 @@ fn index() -> String {
     "Welcome ToDo app  \n Use /init to get data \n /new/name/date to add todo /n /rm/index to remove a todo".to_string()
 }
 
-#[get("/new/<name>/<date>")]
-fn new_todo(name: String, date: String) -> String {
-    let newtodo = Todo { name, date };
+#[post("/new/",, format = "application/json", data = "<todo>")]
+fn new_todo(todo:Todo) -> String {
     let mut data = read_json();
-    data.append(&mut vec![newtodo]);
+    data.append(&mut vec![todo]);
     write_json(data);
 
     " ".to_string()
@@ -38,7 +37,7 @@ fn init_app() -> String {
     // String::new()
 }
 
-#[get("/rm/<index>")]
+#[post("/rm/<index>")]
 fn remove_todo(index: usize) {
     let mut data = read_json();
     data.remove(index);

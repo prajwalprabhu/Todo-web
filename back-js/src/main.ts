@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import * as fs from "fs";
+import bodyParser from "body-parser";
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
 let app = express();
 app.use(cors());
 interface Todo {
@@ -16,19 +19,18 @@ app.get("/init", (req, res) => {
   let data = read();
   res.send(data);
 });
-app.get("/new/:_name/:_date", (req, res) => {
+app.post("/new", urlencodedParser, (req, res) => {
   const data = read();
-  console.log(req.params);
-  let { _name, _date } = req.params;
-  data.push({ name: _name, date: _date });
+  let { name, date } = req.body;
+  data.push({ name: name, date: date });
   write(data);
   res.send();
 });
-app.get("/rm/:index", (req, res) => {
+app.post("/rm/:index", (req, res) => {
   let { index } = req.params;
   let i = parseInt(index);
   let data = read();
-  if (i > -1) {
+  if (i > -1 && i < data.length) {
     data.splice(i, 1);
   }
   write(data);

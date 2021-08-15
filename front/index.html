@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo</title>
-    <link rel="stylesheet" href="./src/index.css">
-</head>
-<body>
- <div class="head">ToDo Handler</div>
- <button onclick="newtodo()">New </button>
- <button onclick="removeTodo()">Remove</button>
- <div class="container" id="main">
-
- </div>
-    <script src="./src/dist/index.js"></script>
-</body>
+    <link rel="stylesheet" href="./src/index.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="head">ToDo Handler</div>
+    <button id="newTodo">New</button>
+    <button id="rmTodo">Remove</button>
+    <div class="container" id="main"></div>
+    <script src="./dist/index.js"></script>
+  </body>
 </html>
