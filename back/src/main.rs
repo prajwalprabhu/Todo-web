@@ -1,14 +1,16 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 #[macro_use]
 extern crate rocket;
+use rocket::fairing::{Fairing, Info, Kind};
+use rocket::http::Header;
+use rocket::{Request, Response};
+
 use serde_derive::{Deserialize, Serialize};
 use serde_json::to_string;
-
 use std::{
     fs::{File, OpenOptions},
     io::{Read, Write},
 };
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct Todo {
     name: String,
@@ -20,21 +22,16 @@ fn index() -> String {
     "Welcome ToDo app  \n Use /init to get data \n /new/name/date to add todo /n /rm/index to remove a todo".to_string()
 }
 
-#[post("/new/",, format = "application/json", data = "<todo>")]
-fn new_todo(todo:Todo) -> String {
+#[post("/new/<name>/<date>")]
+fn new_todo(name: String, date: String) {
     let mut data = read_json();
-    data.append(&mut vec![todo]);
+    data.append(&mut vec![Todo { name, date }]);
     write_json(data);
-
-    " ".to_string()
 }
 
 #[get("/init")]
 fn init_app() -> String {
-    // format!("{:?}", read_json())
     to_string(&read_json()).unwrap()
-    // read_json().to_string()
-    // String::new()
 }
 
 #[post("/rm/<index>")]
@@ -49,7 +46,6 @@ fn write_json(data: Vec<Todo>) {
         .truncate(true)
         .open("./data.json")
         .unwrap();
-    // let buff = forma
     f.write(to_string(&data).unwrap().as_bytes()).unwrap();
     f.flush().unwrap();
 }
@@ -60,7 +56,6 @@ fn read_json() -> Vec<Todo> {
         .read(true)
         .open("./data.json");
     if let Ok(mut file) = f {
-        println!("{:?}", file);
         let mut buff = Vec::<u8>::new();
         file.read_to_end(&mut buff).expect("msg");
         let result = String::from_utf8(buff).expect("msg");
@@ -78,9 +73,6 @@ fn read_json() -> Vec<Todo> {
         read_json()
     }
 }
-use rocket::fairing::{Fairing, Info, Kind};
-use rocket::http::Header;
-use rocket::{Request, Response};
 
 pub struct CORS;
 

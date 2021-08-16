@@ -1,17 +1,15 @@
 import React, { Component } from "react";
 import axios from "./axios";
-interface TodoProps {}
 interface Todo {
   name: string;
   date: string;
 }
 export default class App extends Component {
-  constructor(props: TodoProps) {
-    super(props);
-    this.getData();
-  }
   state = {
     data: [] as Todo[],
+  };
+  componentDidMount = () => {
+    this.getData();
   };
   getData = async () => {
     let res = await axios.get("/init");
@@ -20,7 +18,7 @@ export default class App extends Component {
   newTodo = () => {
     let name = prompt("Enter Name of new Todo");
     let date = prompt("Enter Date of new Todo");
-    axios.get(`/new/${name}/${date}`).then((res) => {
+    axios.post(`/new/${name}/${date}`).then((res) => {
       this.getData();
     });
   };
@@ -32,14 +30,12 @@ export default class App extends Component {
     if (index != null) {
       let indexi = parseInt(index);
       if (indexi >= 0 && indexi < data.length) {
-        axios.get(`/rm/${indexi}`).then((res) => {});
+        axios.post(`/rm/${indexi}`).then((res) => {});
       }
     }
     this.getData();
   };
   render() {
-    console.log(this.state.data);
-
     return (
       <div>
         <div className='head'>ToDo Handler</div>

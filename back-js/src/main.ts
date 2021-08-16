@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import * as fs from "fs";
 import bodyParser from "body-parser";
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 let app = express();
 app.use(cors());
@@ -17,11 +16,11 @@ app.get("/", (req, res) => {
 });
 app.get("/init", (req, res) => {
   let data = read();
-  res.send(data);
+  res.send(JSON.stringify(data));
 });
-app.post("/new", urlencodedParser, (req, res) => {
+app.post("/new/:name/:date", (req, res) => {
   const data = read();
-  let { name, date } = req.body;
+  let { name, date } = req.params;
   data.push({ name: name, date: date });
   write(data);
   res.send();

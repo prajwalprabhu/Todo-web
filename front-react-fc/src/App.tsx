@@ -20,7 +20,7 @@ const App = () => {
     let _name = prompt("Enter Name of new Todo");
     let _date = prompt("Enter Date of new Todo");
     if (_name != null && _date != null) {
-      axios.get(`/new/${_name}/${_date}`);
+      axios.post(`/new/${_name}/${_date}`);
       fetchData();
     }
   };
@@ -32,7 +32,7 @@ const App = () => {
     if (index != null) {
       let indexi = parseInt(index);
       if (indexi >= 0 && indexi < todo.length) {
-        axios.get(`/rm/${indexi}`);
+        axios.post(`/rm/${indexi}`);
         fetchData();
       }
     }
